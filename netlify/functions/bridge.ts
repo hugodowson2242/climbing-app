@@ -24,7 +24,7 @@ export const handler: Handler = async (event) => {
     "Domain=jamescpl.netlify.app",
     "SameSite=Lax",
     "Secure",          // Netlify is HTTPS, keep this
-    "Max-Age=600"      // 10 minutes
+    "Max-Age=7200"      // 2 hours
   ].join("; ");
 
   return {
