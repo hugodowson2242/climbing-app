@@ -20,7 +20,8 @@ export const handler: Handler = async (event) => {
   // In production you can also do an exchange function to keep HttpOnly if you prefer.
   const cookie = [
     `apex_jwt=${encodeURIComponent(token)}`,
-    // "Path=/",
+    "Path=/",
+    "Domain=jamescpl.netlify.app",
     "SameSite=Lax",
     "Secure",          // Netlify is HTTPS, keep this
     "Max-Age=600"      // 10 minutes
