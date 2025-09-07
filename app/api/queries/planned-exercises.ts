@@ -21,7 +21,7 @@ interface PlannedExercisesParams {
 
 const fetchPlannedExercises = async (params: PlannedExercisesParams): Promise<PlannedExercisesResponse> => {
   const url = new URL(
-    'https://g32c06fca666406-jamesgoodeycpl.adb.uk-london-1.oraclecloudapps.com/ords/jamescpl/planned_entities/planned_exercises'
+    'https://g32c06fca666406-jamesgoodeycpl.adb.uk-london-1.oraclecloudapps.com/ords/jamescpl/ext/data/exercises'
   );
 
   url.searchParams.append('ATHLETE_ID', params.athleteId.toString());
