@@ -1,5 +1,6 @@
 import { PlannedExercise } from '@/types/planned-exercise';
 import { useQuery } from '@tanstack/react-query';
+import { authService } from '@/lib/auth';
 
 interface PlannedExercisesResponse {
   items: PlannedExercise[];
@@ -23,13 +24,12 @@ const fetchPlannedExercises = async (params: PlannedExercisesParams): Promise<Pl
     'https://g32c06fca666406-jamesgoodeycpl.adb.uk-london-1.oraclecloudapps.com/ords/jamescpl/planned_entities/planned_exercises'
   );
 
-  // Add query parameters
   url.searchParams.append('ATHLETE_ID', params.athleteId.toString());
   if (params.plannedTrainingSessionId) {
     url.searchParams.append('PLANNED_TRAINING_SESSION_ID', params.plannedTrainingSessionId.toString());
   }
 
-  const response = await fetch(url.toString());
+  const response = await authService.makeAuthenticatedRequest(url.toString());
 
   if (!response.ok) {
     throw new Error('Failed to fetch planned exercises');
@@ -43,7 +43,6 @@ export function usePlannedExercises(params: PlannedExercisesParams) {
     queryKey: ['planned-exercises', params],
     queryFn: () => fetchPlannedExercises(params),
     enabled: !!params.athleteId, // Only run if athleteId exists
-    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 }
 
