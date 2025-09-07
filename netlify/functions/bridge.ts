@@ -1,36 +1,36 @@
-function readCookie(name: string) {
-  const entry = document.cookie.split("; ").find(r => r.startsWith(name + "="));
-  return entry ? decodeURIComponent(entry.split("=")[1]) : null;
-}
+import type { Handler } from "@netlify/functions";
 
-async function getJwt() {
-  const token = readCookie("apex_jwt");
-  if (token) {
-    // Optional: clear it now that we’ve read it
-    document.cookie = "apex_jwt=; Path=/; Max-Age=0; SameSite=Lax; Secure";
-    return token;
-  }
-  // No token? Send user to APEX bridge to authenticate and bounce back
-  window.location.href = "https://<your-apex-host>/ords/r/<your-app-alias>/bridge";
-  return null;
-}
-
-(async () => {
-  const jwt = await getJwt();
-  if (!jwt) return;
-
-  // Example ORDS call
-  const res = await fetch("https://<your-ords-host>/ords/<schema>/ext/data/planned-exercises", {
-    headers: { Authorization: `Bearer ${jwt}` }
-  });
-
-  if (res.status === 401) {
-    // expired → go mint a fresh one
-    window.location.href = "https://<your-apex-host>/ords/r/<your-app-alias>/bridge";
-    return;
+// Accept form POST from APEX (token in body), set short-lived cookie, redirect to SPA
+export const handler: Handler = async (event) => {
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405, body: "Method Not Allowed" };
   }
 
-  const data = await res.json();
-  console.log("Data:", data);
-  // render your UI...
-})();
+  // event.body is x-www-form-urlencoded by default for APEX form posts
+  const body = event.body || "";
+  const params = new URLSearchParams(body);
+  const token = params.get("token");
+
+  if (!token) {
+    return { statusCode: 400, body: "Missing token" };
+  }
+
+  // Set a short-lived cookie (10 minutes).
+  // NOTE: Not HttpOnly so the SPA can read it once in JS, then you can clear it.
+  // In production you can also do an exchange function to keep HttpOnly if you prefer.
+  const cookie = [
+    `apex_jwt=${encodeURIComponent(token)}`,
+    "Path=/",
+    "SameSite=Lax",
+    "Secure",          // Netlify is HTTPS, keep this
+    "Max-Age=600"      // 10 minutes
+  ].join("; ");
+
+  return {
+    statusCode: 302,
+    headers: {
+      "Set-Cookie": cookie,
+      "Location": "/"
+    }
+  };
+};
