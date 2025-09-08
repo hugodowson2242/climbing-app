@@ -78,7 +78,7 @@ export default function RestCard({ previousExercise, nextExercise, onRestComplet
       {/* Timer Component */}
       {previousExercise.set_rest > 0 && (
         <Stopwatch
-          duration={previousExercise.set_rest}
+          duration={previousExercise.set_rest * 10}
           onComplete={handleRestComplete}
         />
       )}
