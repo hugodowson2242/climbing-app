@@ -5,9 +5,8 @@ import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 import ExerciseCard from "./exercise-card";
 import RestCard from "./rest-card";
 
-function PlannedExerciseList() {
-  // Using session ID 2 and athlete ID 341 as in your curl example
-  const { data, isLoading, error } = usePlannedExercisesBySession(341, 2);
+export default function PlannedExerciseList({ sessionId, athleteId }: { sessionId: number, athleteId: number }) {
+  const { data, isLoading, error } = usePlannedExercisesBySession(athleteId, sessionId);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goToNext = () => {
@@ -107,7 +106,7 @@ function PlannedExerciseList() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, padding: 16 }}>
       {/* Carousel Navigation */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <TouchableOpacity
@@ -169,14 +168,6 @@ function PlannedExerciseList() {
           ) : null;
         }
       })()}
-    </View>
-  );
-}
-
-export default function Index() {
-  return (
-    <View style={{ flex: 1, padding: 16 }}>
-      <PlannedExerciseList />
     </View>
   );
 }
