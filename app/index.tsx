@@ -5,8 +5,8 @@ import { ScrollView, Text, View } from "react-native";
 export default function Index() {
   const { session, athlete } = useLocalSearchParams();
 
-  const sessionId = session ? parseInt(session as string) : undefined;
-  const athleteId = athlete ? parseInt(athlete as string) : undefined;
+  const sessionId = session ? parseInt(session as string) : null;
+  const athleteId = athlete ? parseInt(athlete as string) : null;
 
   return (
     <>

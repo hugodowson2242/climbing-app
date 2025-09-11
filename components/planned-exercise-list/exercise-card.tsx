@@ -9,6 +9,7 @@ interface ExerciseCardProps {
 }
 
 export default function ExerciseCard({ exercise, onUpdate }: ExerciseCardProps) {
+  console.log('ExerciseCard rendered with exercise:', exercise);
 
   const { control, handleSubmit, formState: { isDirty } } = useForm<ExerciseFormData>({
     defaultValues: {

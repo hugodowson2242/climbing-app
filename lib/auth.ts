@@ -47,7 +47,7 @@ class AuthService {
 
   async makeAuthenticatedRequest(url: string, options: RequestInit = {}): Promise<Response> {
     const token = await this.getJwt();
-    if (!token) {
+    if (!token && !__DEV__) {
       throw new Error('No authentication token available');
     }
 

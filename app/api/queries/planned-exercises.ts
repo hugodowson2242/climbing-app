@@ -1,6 +1,5 @@
 import { PlannedExercise } from '@/types/planned-exercise';
 import { useQuery } from '@tanstack/react-query';
-import { authService } from '@/lib/auth';
 
 interface PlannedExercisesResponse {
   items: PlannedExercise[];
@@ -29,7 +28,8 @@ const fetchPlannedExercises = async (params: PlannedExercisesParams): Promise<Pl
     url.searchParams.append('PLANNED_TRAINING_SESSION_ID', params.plannedTrainingSessionId.toString());
   }
 
-  const response = await authService.makeAuthenticatedRequest(url.toString());
+  // const response = await authService.makeAuthenticatedRequest(url.toString());
+  const response = await fetch(url.toString());
 
   if (!response.ok) {
     throw new Error('Failed to fetch planned exercises');
@@ -44,11 +44,6 @@ export function usePlannedExercises(params: PlannedExercisesParams) {
     queryFn: () => fetchPlannedExercises(params),
     enabled: !!params.athleteId, // Only run if athleteId exists
   });
-}
-
-// Convenience hook for backward compatibility
-export function usePlannedExercisesByAthlete(athleteId: number) {
-  return usePlannedExercises({ athleteId });
 }
 
 // Convenience hook for fetching exercises in a specific training session

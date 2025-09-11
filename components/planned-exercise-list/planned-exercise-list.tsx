@@ -107,7 +107,6 @@ export default function PlannedExerciseList({ sessionId, athleteId }: { sessionI
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
-      {/* Carousel Navigation */}
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <TouchableOpacity
           onPress={goToPrevious}
@@ -142,7 +141,6 @@ export default function PlannedExerciseList({ sessionId, athleteId }: { sessionI
         </TouchableOpacity>
       </View>
 
-      {/* Conditional rendering of Exercise or Rest Card */}
       {(() => {
         if (isRestPeriod(currentIndex)) {
           const previousExercise = getPreviousExercise();
